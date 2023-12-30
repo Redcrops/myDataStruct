@@ -4,6 +4,8 @@ int main()
 {
     arrayList *aList = NULL;
     arrayListInit(&aList);
+
+    
     printf("hello wrold\n");
     return 0;
 }

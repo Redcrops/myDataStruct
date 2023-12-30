@@ -13,11 +13,11 @@ typedef struct arrayList
 int arrayListInit(arrayList **aList);
 /*插入*/
 /*头插*/
-int arrayListHeadInsert(arrayList *aList);
+int arrayListHeadInsert(arrayList *aList, ELEMENTTYPE val);
 /*尾插*/
-int arrayListTailInsert(arrayList *aList);
+int arrayListTailInsert(arrayList *aList, ELEMENTTYPE val);
 /*指定位置插入*/
-int arrayListPosInsert(arrayList *aList, int pos);
+int arrayListPosInsert(arrayList *aList, int pos, ELEMENTTYPE val);
 /*************************************************************************/
 /*删除*/
 /*头删*/
@@ -26,6 +26,8 @@ int arrayListHeadRemove(arrayList *aList);
 int arrayListTailRemove(arrayList *aList);
 /*指定位置删除*/
 int arrayListPosRemove(arrayList *aList, int pos);
+/*输出动态数组*/
+int arrayListPrint(arrayList *arrayList);
 /*动态数组销毁*/
 int arrayListRuin(arrayList *aList);
 #endif
