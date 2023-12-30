@@ -1,10 +1,14 @@
 #include <stdio.h>
 #include "arrayList.h"
-#define BUFFER_SIZE 5
+#define BUFFER_SIZE 3
 void printBasicDataType(void *data)
 {
     int num = *(int *)data;
     printf("%d\t", num);
+}
+int compareFunc(void *num1, void *num2)
+{
+    return *(int *)num1 == *(int *)num2 ? 1 : 0;
 }
 int main()
 {
@@ -31,13 +35,34 @@ int main()
     arrayListPosInsert(aList, 2, &num4);
     arrayListPrint(aList, printBasicDataType);
 
-    printf("tail remove\n");
-    arrayListTailRemove(aList);
+    printf("insert 1,5,5\n");
+    int array[BUFFER_SIZE] = {1, 5, 5};
+    for (int idx = 0; idx < BUFFER_SIZE; idx++)
+    {
+        arrayListTailInsert(aList, &array[idx]);
+    }
     arrayListPrint(aList, printBasicDataType);
 
-    printf("head remove\n");
-    arrayListHeadRemove(aList);
+    printf("val remove 5\n");
+    int status = arrayListValRemove(aList, &num4, compareFunc);
     arrayListPrint(aList, printBasicDataType);
+    printf("status=%d\n", status);
+
+    printf("pos4 insert 5\n");
+    arrayListPosInsert(aList, 4, &array[1]);
+    arrayListPrint(aList, printBasicDataType);
+
+    printf("pos0 delete\n");
+    arrayListPosRemove(aList, 0);
+    arrayListPrint(aList, printBasicDataType);
+
+    // printf("tail remove\n");
+    // arrayListTailRemove(aList);
+    // arrayListPrint(aList, printBasicDataType);
+
+    // printf("head remove\n");
+    // arrayListHeadRemove(aList);
+    // arrayListPrint(aList, printBasicDataType);
 
     printf("aList->capacity=%d\n", aList->capacity);
     printf("aList->len=%d\n", aList->len);

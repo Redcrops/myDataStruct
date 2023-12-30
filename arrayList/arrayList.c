@@ -6,9 +6,10 @@
 #define INITIAL_SIZE 10
 enum STATUS_CODE
 {
-    MALLLOC_ERROR = -3,
+    MALLLOC_ERROR = -4,
     NULL_PTR,
     INVALID_POS,
+    INVALID_VAL,
     ON_SUCCESS,
 };
 /*********************静态函数前置声明*******************************/
@@ -116,16 +117,53 @@ int arrayListPosRemove(arrayList *aList, int pos)
 {
     checkAlist(aList);
     checkPos(aList, pos);
-    for (int idx = pos; idx < aList->len; idx++)
+#if 0
+    // if (pos < 0 || pos > aList->len)
+    // {
+    //     printf("非法位置删除!\n");
+    //     return 0;
+    // }
+#endif
+    for (int idx = pos; idx < aList->len-1; idx++)
     {
         aList->data[idx] = aList->data[idx + 1];
     }
+
     /*更新长度*/
     aList->len--;
+    return ON_SUCCESS;
 }
+/*删除指定值*/
+int arrayListValRemove(arrayList *aList, ELEMENTTYPE val, int (*compareFunc)(ELEMENTTYPE, ELEMENTTYPE))
+{
+    checkAlist(aList);
+
+#if 0 /*从前往后遍历删除*/
+    for (int idx = 0; idx < aList->len; idx++)
+    {
+        if (val == aList->data[idx])
+        {
+            arrayListPosRemove(aList, idx);
+            idx--;
+        }
+    }
+#endif
+    /*从后往前遍历删除*/
+    for (int idx = aList->len - 1; idx >= 0; idx--)
+    {
+        if (compareFunc(aList->data[idx], val))
+        {
+            arrayListPosRemove(aList, idx);
+        }
+    }
+
+    return ON_SUCCESS;
+}
+
 /*输出动态数组*/
 int arrayListPrint(arrayList *aList, void (*printFunc)(ELEMENTTYPE))
 {
+    checkAlist(aList);
     for (int idx = 0; idx < aList->len; idx++)
     {
         printFunc(aList->data[idx]);
