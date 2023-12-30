@@ -19,6 +19,10 @@ static int checkAlist(arrayList *aList);
 static int checkMalloc(arrayList *aList);
 /*判断插入或者删除位置是否合法*/
 static int checkPos(arrayList *aList, int pos);
+/*扩容*/
+static int expandCapacity(arrayList *aList);
+/*缩容*/
+static int reduceCapacity(arrayList *aList);
 /*********************静态函数实现**********************************/
 static int checkMalloc(arrayList *aList)
 {
@@ -41,6 +45,48 @@ static int checkPos(arrayList *aList, int pos)
     {
         return INVALID_POS;
     }
+}
+/*扩容*/
+static int expandCapacity(arrayList *aList)
+{
+    /*容量为原来的1.5倍*/
+    int biggerCapacity = aList->capacity + aList->capacity >> 1;
+    /*为新数组开辟空间*/
+    ELEMENTTYPE *biggerArray = (ELEMENTTYPE *)malloc(sizeof(ELEMENTTYPE) * biggerCapacity);
+    /*判空*/
+    if (biggerArray == NULL)
+    {
+        return MALLLOC_ERROR;
+    }
+    /*清除脏数据*/
+    memset(biggerArray, 0, sizeof(ELEMENTTYPE) * biggerCapacity);
+    /*拷贝原数据*/
+    memcpy(biggerArray, aList->data, sizeof(ELEMENTTYPE) * (aList->len));
+    /*更新动态数组*/
+    aList->data = biggerArray;
+    /*更新容量*/
+    aList->capacity = biggerCapacity;
+}
+/*缩容*/
+static int reduceCapacity(arrayList *aList)
+{
+    /*容量为原来的0.75倍*/
+    int smallerCapacity = aList->capacity - aList->capacity >> 1;
+    /*为新数组开辟空间*/
+    ELEMENTTYPE *smallerArray = (ELEMENTTYPE *)malloc(sizeof(ELEMENTTYPE) * smallerCapacity);
+    /*判空*/
+    if (smallerArray == NULL)
+    {
+        return MALLLOC_ERROR;
+    }
+    /*清除脏数据*/
+    memset(smallerArray, 0, sizeof(ELEMENTTYPE) * smallerCapacity);
+    /*拷贝原数据*/
+    memcpy(smallerArray, aList->data, sizeof(ELEMENTTYPE) * (aList->len));
+    /*更新动态数组*/
+    aList->data = smallerArray;
+    /*更新容量*/
+    aList->capacity = smallerCapacity;
 }
 /*********************以上为静态函数*******************************/
 // 动态数组初始化
@@ -88,6 +134,11 @@ int arrayListPosInsert(arrayList *aList, int pos, ELEMENTTYPE val)
     checkAlist(aList);
     /*检查插入位置*/
     checkPos(aList, pos);
+    /*如果当前数组长度的1.5倍大于容量就扩容*/
+    if ((aList->len + aList->len >> 1) > aList->capacity)
+    {
+        expandCapacity(aList);
+    }
     /*从数组尾部开始后移，如果从中间位置开始后移会覆盖*/
     for (int idx = aList->len - 1; idx >= pos; idx--)
     {
@@ -124,7 +175,12 @@ int arrayListPosRemove(arrayList *aList, int pos)
     //     return 0;
     // }
 #endif
-    for (int idx = pos; idx < aList->len-1; idx++)
+    /*如果容量的0.75倍还是大于长度就缩容*/
+    if (aList->capacity - aList->capacity >> 1 > aList->len)
+    {
+        reduceCapacity(aList);
+    }
+    for (int idx = pos; idx < aList->len - 1; idx++)
     {
         aList->data[idx] = aList->data[idx + 1];
     }
@@ -138,19 +194,19 @@ int arrayListValRemove(arrayList *aList, ELEMENTTYPE val, int (*compareFunc)(ELE
 {
     checkAlist(aList);
 
-#if 0 /*从前往后遍历删除*/
-    for (int idx = 0; idx < aList->len; idx++)
+#if 0 /*只能删除一个数值*/
+    for (int idx = aList->len - 1; idx >= 0; idx--)
     {
         if (val == aList->data[idx])
         {
             arrayListPosRemove(aList, idx);
-            idx--;
         }
     }
 #endif
     /*从后往前遍历删除*/
     for (int idx = aList->len - 1; idx >= 0; idx--)
     {
+        /*优化*/
         if (compareFunc(aList->data[idx], val))
         {
             arrayListPosRemove(aList, idx);
@@ -173,4 +229,19 @@ int arrayListPrint(arrayList *aList, void (*printFunc)(ELEMENTTYPE))
 /*动态数组销毁*/
 int arrayListRuin(arrayList *aList)
 {
+    checkAlist(aList);
+    for (int idx = 0; idx < aList->len; idx++)
+    {
+        arrayListTailRemove(aList);
+    }
+    if (aList->data == NULL)
+    {
+        free(aList->data);
+        aList->data = NULL;
+    }
+    if (aList == NULL)
+    {
+        free(aList);
+        aList = NULL;
+    }
 }
