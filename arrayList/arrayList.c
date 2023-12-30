@@ -104,14 +104,24 @@ int arrayListPosInsert(arrayList *aList, int pos, ELEMENTTYPE val)
 /*头删*/
 int arrayListHeadRemove(arrayList *aList)
 {
+    return arrayListPosRemove(aList, 0);
 }
 /*尾删*/
 int arrayListTailRemove(arrayList *aList)
 {
+    return arrayListPosRemove(aList, aList->len - 1);
 }
 /*指定位置删除*/
 int arrayListPosRemove(arrayList *aList, int pos)
 {
+    checkAlist(aList);
+    checkPos(aList, pos);
+    for (int idx = pos; idx < aList->len; idx++)
+    {
+        aList->data[idx] = aList->data[idx + 1];
+    }
+    /*更新长度*/
+    aList->len--;
 }
 /*输出动态数组*/
 int arrayListPrint(arrayList *aList, void (*printFunc)(ELEMENTTYPE))
