@@ -17,7 +17,7 @@ static int checkAlist(arrayList *aList);
 /*动态数组分配判空和清除脏数据*/
 static int checkMalloc(arrayList *aList);
 /*判断插入或者删除位置是否合法*/
-static checkPos(arrayList *aList, int pos);
+static int checkPos(arrayList *aList, int pos);
 /*********************静态函数实现**********************************/
 static int checkMalloc(arrayList *aList)
 {
@@ -34,7 +34,7 @@ static int checkAlist(arrayList *aList)
         return NULL_PTR;
     }
 }
-static checkPos(arrayList *aList, int pos)
+static int checkPos(arrayList *aList, int pos)
 {
     if (pos < 0 || pos > aList->len)
     {
@@ -114,8 +114,13 @@ int arrayListPosRemove(arrayList *aList, int pos)
 {
 }
 /*输出动态数组*/
-int arrayListPrint(arrayList *arrayList)
+int arrayListPrint(arrayList *aList, void (*printFunc)(ELEMENTTYPE))
 {
+    for (int idx = 0; idx < aList->len; idx++)
+    {
+        printFunc(aList->data[idx]);
+    }
+    printf("\n");
 }
 /*动态数组销毁*/
 int arrayListRuin(arrayList *aList)

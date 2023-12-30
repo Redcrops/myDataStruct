@@ -27,7 +27,7 @@ int arrayListTailRemove(arrayList *aList);
 /*指定位置删除*/
 int arrayListPosRemove(arrayList *aList, int pos);
 /*输出动态数组*/
-int arrayListPrint(arrayList *arrayList);
+int arrayListPrint(arrayList *arrayList, void (*printFunc)(ELEMENTTYPE));
 /*动态数组销毁*/
 int arrayListRuin(arrayList *aList);
 #endif
