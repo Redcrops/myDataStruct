@@ -50,7 +50,7 @@ static int checkPos(arrayList *aList, int pos)
 static int expandCapacity(arrayList *aList)
 {
     /*容量为原来的1.5倍*/
-    int biggerCapacity = aList->capacity + aList->capacity >> 1;
+    int biggerCapacity = aList->capacity + (aList->capacity >> 1);
     /*为新数组开辟空间*/
     ELEMENTTYPE *biggerArray = (ELEMENTTYPE *)malloc(sizeof(ELEMENTTYPE) * biggerCapacity);
     /*判空*/
@@ -66,12 +66,13 @@ static int expandCapacity(arrayList *aList)
     aList->data = biggerArray;
     /*更新容量*/
     aList->capacity = biggerCapacity;
+    return ON_SUCCESS;
 }
 /*缩容*/
 static int reduceCapacity(arrayList *aList)
 {
-    /*容量为原来的0.75倍*/
-    int smallerCapacity = aList->capacity - aList->capacity >> 1;
+    /*容量为原来的0.5倍*/
+    int smallerCapacity = aList->capacity - (aList->capacity >> 1);
     /*为新数组开辟空间*/
     ELEMENTTYPE *smallerArray = (ELEMENTTYPE *)malloc(sizeof(ELEMENTTYPE) * smallerCapacity);
     /*判空*/
@@ -87,6 +88,7 @@ static int reduceCapacity(arrayList *aList)
     aList->data = smallerArray;
     /*更新容量*/
     aList->capacity = smallerCapacity;
+    return ON_SUCCESS;
 }
 /*********************以上为静态函数*******************************/
 // 动态数组初始化
@@ -135,7 +137,7 @@ int arrayListPosInsert(arrayList *aList, int pos, ELEMENTTYPE val)
     /*检查插入位置*/
     checkPos(aList, pos);
     /*如果当前数组长度的1.5倍大于容量就扩容*/
-    if ((aList->len + aList->len >> 1) > aList->capacity)
+    if ((aList->len + (aList->len >> 1)) > aList->capacity)
     {
         expandCapacity(aList);
     }
@@ -175,8 +177,8 @@ int arrayListPosRemove(arrayList *aList, int pos)
     //     return 0;
     // }
 #endif
-    /*如果容量的0.75倍还是大于长度就缩容*/
-    if (aList->capacity - aList->capacity >> 1 > aList->len)
+    /*如果容量的0.5倍还是大于长度就缩容*/
+    if (aList->capacity - (aList->capacity >> 1) > aList->len)
     {
         reduceCapacity(aList);
     }
