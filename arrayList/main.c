@@ -70,6 +70,6 @@ int main()
     // printf("head remove\n");
     // arrayListHeadRemove(aList);
     // arrayListPrint(aList, printBasicDataType);
-    // arrayListRuin(aList);
+    arrayListRuin(aList);
     return 0;
 }

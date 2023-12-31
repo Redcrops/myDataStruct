@@ -62,6 +62,12 @@ static int expandCapacity(arrayList *aList)
     memset(biggerArray, 0, sizeof(ELEMENTTYPE) * biggerCapacity);
     /*拷贝原数据*/
     memcpy(biggerArray, aList->data, sizeof(ELEMENTTYPE) * (aList->len));
+    /*释放原来的数组*/
+    if (aList->data != NULL)
+    {
+        free(aList->data);
+        aList->data = NULL;
+    }
     /*更新动态数组*/
     aList->data = biggerArray;
     /*更新容量*/
@@ -84,6 +90,13 @@ static int reduceCapacity(arrayList *aList)
     memset(smallerArray, 0, sizeof(ELEMENTTYPE) * smallerCapacity);
     /*拷贝原数据*/
     memcpy(smallerArray, aList->data, sizeof(ELEMENTTYPE) * (aList->len));
+
+    /*释放原来的数组*/
+    if (aList->data != NULL)
+    {
+        free(aList->data);
+        aList->data = NULL;
+    }
     /*更新动态数组*/
     aList->data = smallerArray;
     /*更新容量*/
@@ -104,6 +117,8 @@ int arrayListInit(arrayList **aList)
     /*判空*/
     if (alist->data == NULL)
     {
+        free(alist);
+        alist == NULL;
         return MALLLOC_ERROR;
     }
     /*清除脏数据*/
@@ -236,12 +251,12 @@ int arrayListRuin(arrayList *aList)
     {
         arrayListTailRemove(aList);
     }
-    if (aList->data == NULL)
+    if (aList->data != NULL)
     {
         free(aList->data);
         aList->data = NULL;
     }
-    if (aList == NULL)
+    if (aList != NULL)
     {
         free(aList);
         aList = NULL;
