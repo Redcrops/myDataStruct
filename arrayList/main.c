@@ -50,7 +50,6 @@ int main()
         printf("aList->len=%d\n", aList->len);
         printf("aList->capacity=%d\n", aList->capacity);
     }
-
     // printf("val remove 5\n");
     // int status = arrayListValRemove(aList, &num4, compareFunc);
     // arrayListPrint(aList, printBasicDataType);
@@ -71,6 +70,6 @@ int main()
     // printf("head remove\n");
     // arrayListHeadRemove(aList);
     // arrayListPrint(aList, printBasicDataType);
-
+    // arrayListRuin(aList);
     return 0;
 }
