@@ -17,11 +17,11 @@ typedef struct LinkList
 int linkListInit(LinkList **pList);
 /*******************************插入************************************/
 /*头插*/
-int linkListHeadInsert(LinkList *pList);
+int linkListHeadInsert(LinkList *pList, ELEMENTTYPE val);
 /*尾插*/
-int linkListTailInsert(LinkList *pList);
+int linkListTailInsert(LinkList *pList, ELEMENTTYPE val);
 /*指定位置插*/
-int linkListPosInsert(LinkList *pList, int pos);
+int linkListPosInsert(LinkList *pList, int pos, ELEMENTTYPE val);
 /*******************************删除************************************/
 /*头删*/
 int linkListHeadRemove(LinkList *pList);
@@ -31,6 +31,8 @@ int linkListTailRemove(LinkList *pList);
 int linkListPosRemove(LinkList *pList, int pos);
 /*指定值删*/
 int linkListValRemove(LinkList *pList, ELEMENTTYPE val);
+/*输出链表*/
+int linkListPrint(LinkList *pList,void (*printData)(ELEMENTTYPE));
 /*链表的销毁*/
 int linkListRuin(LinkList *pList);
 #endif /*__LINK_LIST_H_*/

@@ -50,16 +50,45 @@ int linkListInit(LinkList **pList)
 }
 /*******************************插入************************************/
 /*头插*/
-int linkListHeadInsert(LinkList *pList)
+int linkListHeadInsert(LinkList *pList, ELEMENTTYPE val)
 {
+    return linkListPosInsert(pList, 0, val);
 }
 /*尾插*/
-int linkListTailInsert(LinkList *pList)
+int linkListTailInsert(LinkList *pList, ELEMENTTYPE val)
 {
+    return linkListPosInsert(pList, pList->len, val);
 }
+
 /*指定位置插*/
-int linkListPosInsert(LinkList *pList, int pos)
+int linkListPosInsert(LinkList *pList, int pos, ELEMENTTYPE val)
 {
+    checkList(pList);
+    /*为新节点开辟空间*/
+    ListNode *newNode = calloc(1, sizeof(ListNode));
+    /*判空*/
+    if (newNode == NULL)
+    {
+        return CALLLOC_ERROR;
+    }
+    /*维护新节点*/
+    newNode->data = val;
+    newNode->next = NULL;
+    if (pos < 0 || pos > pList->len)
+    {
+        return INVALID_POS;
+    }
+    ListNode *travelNode = pList->head;
+    for (int idx = 0; idx < pos; idx++)
+    {
+        travelNode = travelNode->next;
+    }
+    /*改变节点指针方向*/
+    newNode->next = travelNode->next;
+    travelNode->next = newNode;
+    /*长度增加*/
+    pList->len++;
+    return ON_SUCCESS;
 }
 /*******************************删除************************************/
 /*头删*/
@@ -77,6 +106,18 @@ int linkListPosRemove(LinkList *pList, int pos)
 /*指定值删*/
 int linkListValRemove(LinkList *pList, ELEMENTTYPE val)
 {
+}
+/*输出链表*/
+int linkListPrint(LinkList *pList, void (*printData)(ELEMENTTYPE))
+{
+    checkList(pList);
+    ListNode *travelNdoe = pList->head->next;
+    while (travelNdoe != NULL)
+    {
+        printData(travelNdoe->data);
+        travelNdoe = travelNdoe->next;
+    }
+    printf("\n");
 }
 /*链表的销毁*/
 int linkListRuin(LinkList *pList)
