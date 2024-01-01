@@ -8,10 +8,10 @@ void printBasicDataType(void *val)
     printf("%d\t", num);
 }
 
-int compareFunc(void *num1, void *num2)
-{
-    return *(int *)num1 == *(int *)num2 ? 1 : 0;
-}
+// int compareFunc(void *num1, void *num2)
+// {
+//     return *(int *)num1 == *(int *)num2 ? 1 : 0;
+// }
 
 int main()
 {
@@ -62,6 +62,8 @@ int main()
     int num5 = 2;
     linkListValRemove(singleList, &num5);
     linkListPrint(singleList, printBasicDataType);
+
+    linkListRuin(singleList);
 
     return 0;
 }

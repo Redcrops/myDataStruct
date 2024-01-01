@@ -205,4 +205,21 @@ int linkListPrint(LinkList *pList, void (*printData)(ELEMENTTYPE))
 /*链表的销毁*/
 int linkListRuin(LinkList *pList)
 {
+    checkList(pList);
+    /*从头到尾会有内存泄露*/
+    for (int idx = pList->len; idx >= 1; idx--)
+    {
+        linkListTailRemove(pList);
+    }
+    if (pList->head != NULL)
+    {
+        free(pList->head);
+        pList->head = NULL;
+    }
+    if (pList != NULL)
+    {
+        free(pList);
+        pList = NULL;
+    }
+    return ON_SUCCESS;
 }
