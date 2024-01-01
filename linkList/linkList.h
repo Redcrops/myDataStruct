@@ -32,7 +32,7 @@ int linkListPosRemove(LinkList *pList, int pos);
 /*指定值删*/
 int linkListValRemove(LinkList *pList, ELEMENTTYPE val);
 /*输出链表*/
-int linkListPrint(LinkList *pList,void (*printData)(ELEMENTTYPE));
+int linkListPrint(LinkList *pList, void (*printData)(ELEMENTTYPE));
 /*链表的销毁*/
 int linkListRuin(LinkList *pList);
 #endif /*__LINK_LIST_H_*/

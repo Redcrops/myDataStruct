@@ -11,18 +11,45 @@ enum STATUS_CODE
     INVALID_VAL,
     ON_SUCCESS,
 };
+#define NO_POS -1
 /*****************************静态函数声明*************************************/
 /*判链表空*/
-static int checkList(LinkList *aList);
+static int checkList(LinkList *pList);
+static int baseValGetPos(LinkList *pList, ELEMENTTYPE val, int *pPos, int (*compareFunc)(ELEMENTTYPE, ELEMENTTYPE));
+static int compareFunc(void *val1, void *val2);
 /*****************************静态函数实现*************************************/
 /*判链表空*/
-static int checkList(LinkList *aList)
+static int checkList(LinkList *pList)
 {
-    if (aList == NULL)
+    if (pList == NULL)
     {
         return NULL_PTR;
     }
 }
+static int baseValGetPos(LinkList *pList, ELEMENTTYPE val, int *pPos, int (*compareFunc)(ELEMENTTYPE, ELEMENTTYPE))
+{
+    ListNode *travelNode = pList->head->next;
+    int pos = 1;
+    while (travelNode != NULL)
+    {
+        if (compareFunc(travelNode->data, val))
+        {
+            *pPos = pos;
+            return ON_SUCCESS;
+        }
+        travelNode = travelNode->next;
+        pos++;
+    }
+    /*如果没有找到置-1*/
+    pos = NO_POS;
+    *pPos = pos;
+    return INVALID_VAL;
+}
+static int compareFunc(void *val1, void *val2)
+{
+    return *(int *)val1 == *(int *)val2 ? 1 : 0;
+}
+/*****************************以上为静态函数*************************************/
 int linkListInit(LinkList **pList)
 {
     /*为链表分配空间*/
@@ -104,6 +131,7 @@ int linkListTailRemove(LinkList *pList)
 /*指定位置删*/
 int linkListPosRemove(LinkList *pList, int pos)
 {
+#if 1
     checkList(pList);
     /*pos在1到pList->len之间才合法*/
     if (pos < 1 || pos > pList->len)
@@ -119,14 +147,8 @@ int linkListPosRemove(LinkList *pList, int pos)
     }
     ListNode *deleteNode = travelNode->next;
     /*更新指针*/
-    if (deleteNode->next == NULL)
-    {
-        travelNode->next = NULL;
-    }
-    else
-    {
-        travelNode->next = deleteNode->next;
-    }
+
+    travelNode->next = deleteNode->next;
 
     if (deleteNode != NULL)
     {
@@ -135,10 +157,38 @@ int linkListPosRemove(LinkList *pList, int pos)
     }
     pList->len--;
     return ON_SUCCESS;
+#endif
 }
 /*指定值删*/
 int linkListValRemove(LinkList *pList, ELEMENTTYPE val)
 {
+    checkList(pList);
+    ListNode *travelNode = pList->head->next;
+#if 0 // bug,plist->len一直在更新，也无法像动态数组那样从尾到头遍历
+    for (int idx = 1; idx <= pList->len; idx++)
+    {
+        if (compareFunc(travelNode->data, val))
+        {
+            linkListPosRemove(pList, idx);
+            idx--;
+        }
+        travelNode = travelNode->next;
+    }
+
+#endif
+    int pos = 0;
+    while (travelNode != NULL && pos != NO_POS)
+    {
+        baseValGetPos(pList, val, &pos, compareFunc);
+        linkListPosRemove(pList, pos);
+        travelNode = travelNode->next;
+    }
+    if (pos == NO_POS)
+    {
+        return INVALID_VAL;
+    }
+
+    return ON_SUCCESS;
 }
 /*输出链表*/
 int linkListPrint(LinkList *pList, void (*printData)(ELEMENTTYPE))
