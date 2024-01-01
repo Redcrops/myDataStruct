@@ -10,7 +10,7 @@ enum STATUS_CODE
 {
     CALLLOC_ERROR = -4,
     NULL_PTR,
-    INVALID_POS,
+    INVALID_KEY,
     INVALID_VAL,
     ON_SUCCESS,
 };
@@ -20,6 +20,9 @@ static int hashFunc(int key);
 
 /*双链表头插法*/
 static int headInsert(LinkList *list, Data key_value);
+
+/*删除当前节点*/
+static int deleteCurrentNode(ListNode *node);
 /***********************静态函数实现*************************/
 /*除留余数法*/
 static int hashFunc(int key)
@@ -52,6 +55,21 @@ static int headInsert(LinkList *list, Data key_value)
     }
     list->head->next = newNode;
     return ON_SUCCESS;
+}
+static int deleteCurrentNode(ListNode *deleteNode)
+{
+    ListNode *preDeleteNode = deleteNode->prev;
+    preDeleteNode->next = deleteNode->next;
+    if (deleteNode->next != NULL)
+    {
+        deleteNode->next->prev = preDeleteNode;
+    }
+
+    if (deleteNode != NULL)
+    {
+        free(deleteNode);
+        deleteNode = NULL;
+    }
 }
 /***********************以上为静态函数*************************/
 int hashTableInit(HashTable **Hash)
@@ -119,6 +137,23 @@ bool hashTableSeek(HashTable *hash, int key)
 /*删除关键字结点*/
 int hashTableDeleteKey(HashTable *hash, int key)
 {
+    int keyLocation = hashFunc(key);
+    if (hash->HashMap[keyLocation]->head->next == NULL)
+    {
+        return INVALID_KEY;
+    }
+    ListNode *travelNode = hash->HashMap[keyLocation]->head->next;
+    while (travelNode != NULL)
+    {
+        if (travelNode->Data.key == key)
+        {
+            /*删除当前结点*/
+            deleteCurrentNode(travelNode);
+            break;
+        }
+        travelNode = travelNode->next;
+    }
+    return ON_SUCCESS;
 }
 /*哈希表的销毁*/
 int ruinHashTable(HashTable *hash)

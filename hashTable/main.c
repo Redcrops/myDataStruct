@@ -15,5 +15,9 @@ int main()
     }
     int status = hashTableSeek(hash, 289);
     printf("status=%d\n", status);
+
+    hashTableDeleteKey(hash, 289);
+    status = hashTableSeek(hash, 289);
+    printf("status=%d\n", status);
     return 0;
 }
