@@ -13,6 +13,7 @@ int main()
     {
         hashTableInsert(hash, keyValArray[idx]);
     }
-
+    int status = hashTableSeek(hash, 289);
+    printf("status=%d\n", status);
     return 0;
 }

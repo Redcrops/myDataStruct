@@ -1,6 +1,6 @@
 #ifndef __HASH_TABLE_H_
 #define __HASH_TABLE_H_
-
+#include <stdbool.h>
 typedef struct Data
 {
     int key;
@@ -30,7 +30,7 @@ int hashTableInit(HashTable **Hash);
 /*插入键值对*/
 int hashTableInsert(HashTable *hash, Data data);
 /*查找关键字所在位置*/
-int hashTableSeek(HashTable *hash, int key, , int *storeLocation);
+bool hashTableSeek(HashTable *hash, int key);
 /*删除关键字结点*/
 int hashTableDeleteKey(HashTable *hash, int key);
 /*哈希表的销毁*/

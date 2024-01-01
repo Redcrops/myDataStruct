@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 /*哈希表初始化*/
 #define INITIAL_SIZE 100
 #define PRIME_NUM 97
@@ -38,8 +39,8 @@ static int headInsert(LinkList *list, Data key_value)
     }
 
     /*初始化新节点*/
-    newNode->Data.key = 0;
-    newNode->Data.value = 0;
+    newNode->Data.key = key_value.key;
+    newNode->Data.value = key_value.value;
     newNode->next = NULL;
     newNode->prev = NULL;
     /*修改指针指向*/
@@ -96,11 +97,24 @@ int hashTableInsert(HashTable *hash, Data key_value)
     headInsert(hash->HashMap[storeLocation], key_value);
     return ON_SUCCESS;
 }
-/*查找关键字所在位置*/
-int hashTableSeek(HashTable *hash, int key,int *storeLocation)
+/*查找关键字是否存在于哈希表中*/
+bool hashTableSeek(HashTable *hash, int key)
 {
-    
-    
+    int keyLocation = hashFunc(key);
+    if (hash->HashMap[keyLocation]->head->next == NULL)
+    {
+        return false;
+    }
+    ListNode *travelNode = hash->HashMap[keyLocation]->head->next;
+    while (travelNode != NULL)
+    {
+        if (travelNode->Data.key == key)
+        {
+            return true;
+        }
+        travelNode = travelNode->next;
+    }
+    return false;
 }
 /*删除关键字结点*/
 int hashTableDeleteKey(HashTable *hash, int key)
