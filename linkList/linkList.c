@@ -133,6 +133,7 @@ int linkListPosRemove(LinkList *pList, int pos)
         free(deleteNode);
         deleteNode = NULL;
     }
+    pList->len--;
     return ON_SUCCESS;
 }
 /*指定值删*/
