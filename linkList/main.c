@@ -31,5 +31,17 @@ int main()
     linkListPosInsert(singleList, 2, &num4);
     linkListPrint(singleList, printBasicDataType);
 
+    printf("pos2 remove \n");
+    linkListPosRemove(singleList, 2);
+    linkListPrint(singleList, printBasicDataType);
+
+    printf("head remove \n");
+    linkListHeadRemove(singleList);
+    linkListPrint(singleList, printBasicDataType);
+
+    printf("tail remove \n");
+    linkListTailRemove(singleList);
+    linkListPrint(singleList, printBasicDataType);
+
     return 0;
 }

@@ -94,14 +94,46 @@ int linkListPosInsert(LinkList *pList, int pos, ELEMENTTYPE val)
 /*头删*/
 int linkListHeadRemove(LinkList *pList)
 {
+    return linkListPosRemove(pList, 1);
 }
 /*尾删*/
 int linkListTailRemove(LinkList *pList)
 {
+    return linkListPosRemove(pList, pList->len);
 }
 /*指定位置删*/
 int linkListPosRemove(LinkList *pList, int pos)
 {
+    checkList(pList);
+    /*pos在1到pList->len之间才合法*/
+    if (pos < 1 || pos > pList->len)
+    {
+        return INVALID_POS;
+    }
+    /*新建移动指针*/
+    ListNode *travelNode = pList->head;
+    /*找到待删除结点的前一个结点*/
+    for (int idx = 0; idx < pos - 1; idx++)
+    {
+        travelNode = travelNode->next;
+    }
+    ListNode *deleteNode = travelNode->next;
+    /*更新指针*/
+    if (deleteNode->next == NULL)
+    {
+        travelNode->next = NULL;
+    }
+    else
+    {
+        travelNode->next = deleteNode->next;
+    }
+
+    if (deleteNode != NULL)
+    {
+        free(deleteNode);
+        deleteNode = NULL;
+    }
+    return ON_SUCCESS;
 }
 /*指定值删*/
 int linkListValRemove(LinkList *pList, ELEMENTTYPE val)
