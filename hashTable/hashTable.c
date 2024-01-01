@@ -4,6 +4,7 @@
 #include <string.h>
 /*哈希表初始化*/
 #define INITIAL_SIZE 100
+#define PRIME_NUM 97
 enum STATUS_CODE
 {
     CALLLOC_ERROR = -4,
@@ -12,6 +13,46 @@ enum STATUS_CODE
     INVALID_VAL,
     ON_SUCCESS,
 };
+/***********************静态函数前置声明*************************/
+/*哈希函数*/
+static int hashFunc(int key);
+
+/*双链表头插法*/
+static int headInsert(LinkList *list, Data key_value);
+/***********************静态函数实现*************************/
+/*除留余数法*/
+static int hashFunc(int key)
+{
+    /*选择小于哈希表长度的最大质数来做取余*/
+    int ret = key % PRIME_NUM;
+    return ret;
+}
+
+/*双链表头插法*/
+static int headInsert(LinkList *list, Data key_value)
+{
+    ListNode *newNode = calloc(1, sizeof(ListNode));
+    if (newNode == NULL)
+    {
+        return CALLLOC_ERROR;
+    }
+
+    /*初始化新节点*/
+    newNode->Data.key = 0;
+    newNode->Data.value = 0;
+    newNode->next = NULL;
+    newNode->prev = NULL;
+    /*修改指针指向*/
+    newNode->prev = list->head;
+    newNode->next = list->head->next;
+    if (list->head->next != NULL)
+    {
+        list->head->next->prev = newNode;
+    }
+    list->head->next = newNode;
+    return ON_SUCCESS;
+}
+/***********************以上为静态函数*************************/
 int hashTableInit(HashTable **Hash)
 {
     HashTable *hash = calloc(1, sizeof(HashTable));
@@ -19,6 +60,7 @@ int hashTableInit(HashTable **Hash)
     {
         return CALLLOC_ERROR;
     }
+    hash->mapLen = INITIAL_SIZE;
     hash->HashMap = calloc(INITIAL_SIZE, sizeof(LinkList));
     if (hash->HashMap == NULL)
     {
@@ -47,13 +89,18 @@ int hashTableInit(HashTable **Hash)
     return ON_SUCCESS;
 }
 /*插入键值对*/
-int hashTableInsert(HashTable *hash, Data data)
+int hashTableInsert(HashTable *hash, Data key_value)
 {
-    
+    /*通过哈希函数获得在哈希表中的存储位置*/
+    int storeLocation = hashFunc(key_value.key);
+    headInsert(hash->HashMap[storeLocation], key_value);
+    return ON_SUCCESS;
 }
 /*查找关键字所在位置*/
-int hashTableSeek(HashTable *hash, int key)
+int hashTableSeek(HashTable *hash, int key,int *storeLocation)
 {
+    
+    
 }
 /*删除关键字结点*/
 int hashTableDeleteKey(HashTable *hash, int key)

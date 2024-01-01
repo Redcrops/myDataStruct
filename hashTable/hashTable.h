@@ -26,11 +26,11 @@ typedef struct HashTable
     int mapLen;
 } HashTable;
 /*哈希表初始化*/
-HashTable *hashTableInit();
+int hashTableInit(HashTable **Hash);
 /*插入键值对*/
 int hashTableInsert(HashTable *hash, Data data);
 /*查找关键字所在位置*/
-int hashTableSeek(HashTable *hash, int key);
+int hashTableSeek(HashTable *hash, int key, , int *storeLocation);
 /*删除关键字结点*/
 int hashTableDeleteKey(HashTable *hash, int key);
 /*哈希表的销毁*/
