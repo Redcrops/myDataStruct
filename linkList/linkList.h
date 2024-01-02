@@ -31,6 +31,8 @@ int linkListTailRemove(LinkList *pList);
 int linkListPosRemove(LinkList *pList, int pos);
 /*指定值删*/
 int linkListValRemove(LinkList *pList, ELEMENTTYPE val);
+/*根据值获得位置*/
+int linkListValGetPos(LinkList *pList, ELEMENTTYPE val,int *pos);
 /*输出链表*/
 int linkListPrint(LinkList *pList, void (*printData)(ELEMENTTYPE));
 /*链表的销毁*/

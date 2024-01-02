@@ -190,6 +190,27 @@ int linkListValRemove(LinkList *pList, ELEMENTTYPE val)
 
     return ON_SUCCESS;
 }
+/*根据值获得位置*/
+int linkListValGetPos(LinkList *pList, ELEMENTTYPE val, int *pos)
+{
+    checkList(pList);
+    int idx = 1;
+    ListNode *travelNode = pList->head->next;
+    if (travelNode == NULL)
+    {
+        return INVALID_VAL;
+    }
+    while (travelNode != NULL)
+    {
+        if (compareFunc(travelNode->data, val))
+        {
+            *pos = idx;
+            return ON_SUCCESS;
+        }
+        travelNode = travelNode->next;
+        idx++;
+    }
+}
 /*输出链表*/
 int linkListPrint(LinkList *pList, void (*printData)(ELEMENTTYPE))
 {
