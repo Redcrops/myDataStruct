@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-/*哈希表初始化*/
 #define INITIAL_SIZE 100
 #define PRIME_NUM 97
 enum STATUS_CODE
@@ -23,7 +22,44 @@ static int headInsert(LinkList *list, Data key_value);
 
 /*删除当前节点*/
 static int deleteCurrentNode(ListNode *node);
+/*尾删*/
+static int deleteTailNode(LinkList *list);
+/*清空头结点*/
+static int freeHead(LinkList *list);
+/*判空哈希表*/
+static int checkHash(HashTable *hash);
 /***********************静态函数实现*************************/
+/*判空哈希表*/
+static int checkHash(HashTable *hash)
+{
+    if (hash == NULL)
+    {
+        return NULL_PTR;
+    }
+}
+/*清空头结点*/
+static int freeHead(LinkList *list)
+{
+    if (list->head != NULL)
+    {
+        free(list->head);
+        list->head = NULL;
+    }
+}
+/*尾删*/
+static int deleteTailNode(LinkList *list)
+{
+    ListNode *travelNode = list->head->next;
+    while (travelNode->next != NULL)
+    {
+        travelNode = travelNode->next;
+    }
+    if (travelNode != NULL)
+    {
+        free(travelNode);
+        travelNode = NULL;
+    }
+}
 /*除留余数法*/
 static int hashFunc(int key)
 {
@@ -54,6 +90,7 @@ static int headInsert(LinkList *list, Data key_value)
         list->head->next->prev = newNode;
     }
     list->head->next = newNode;
+    list->listLen++;
     return ON_SUCCESS;
 }
 static int deleteCurrentNode(ListNode *deleteNode)
@@ -72,6 +109,7 @@ static int deleteCurrentNode(ListNode *deleteNode)
     }
 }
 /***********************以上为静态函数*************************/
+/*哈希表初始化*/
 int hashTableInit(HashTable **Hash)
 {
     HashTable *hash = calloc(1, sizeof(HashTable));
@@ -101,6 +139,7 @@ int hashTableInit(HashTable **Hash)
         hash->HashMap[idx]->head->Data.value = 0;
         hash->HashMap[idx]->head->next = NULL;
         hash->HashMap[idx]->head->prev = hash->HashMap[idx]->head;
+        hash->HashMap[idx]->listLen = 0;
     }
 
     /*解引用*/
@@ -110,6 +149,7 @@ int hashTableInit(HashTable **Hash)
 /*插入键值对*/
 int hashTableInsert(HashTable *hash, Data key_value)
 {
+    checkHash(hash);
     /*通过哈希函数获得在哈希表中的存储位置*/
     int storeLocation = hashFunc(key_value.key);
     headInsert(hash->HashMap[storeLocation], key_value);
@@ -118,6 +158,7 @@ int hashTableInsert(HashTable *hash, Data key_value)
 /*查找关键字是否存在于哈希表中*/
 bool hashTableSeek(HashTable *hash, int key)
 {
+    checkHash(hash);
     int keyLocation = hashFunc(key);
     if (hash->HashMap[keyLocation]->head->next == NULL)
     {
@@ -158,4 +199,44 @@ int hashTableDeleteKey(HashTable *hash, int key)
 /*哈希表的销毁*/
 int ruinHashTable(HashTable *hash)
 {
+    checkHash(hash);
+    /*清空哈希表中的每一个链表*/
+    for (int idx = 0; idx < INITIAL_SIZE; idx++)
+    {
+        if (hash->HashMap[idx]->head->next != NULL)
+        {
+            ListNode *travelNode = hash->HashMap[idx]->head->next;
+            while (travelNode != NULL)
+            {
+                /*释放链表节点*/
+                ListNode *temp = travelNode->next;
+                deleteCurrentNode(travelNode);
+                travelNode = temp;
+            }
+            /*释放头结点*/
+            if (hash->HashMap[idx]->head != NULL)
+            {
+                free(hash->HashMap[idx]->head);
+                hash->HashMap[idx]->head = NULL;
+            }
+            /*释放链表*/
+            if (hash->HashMap[idx] != NULL)
+            {
+                free(hash->HashMap[idx]);
+                hash->HashMap[idx] = NULL;
+            }
+        }
+    }
+    /*清空哈希表*/
+    if (hash->HashMap != NULL)
+    {
+        free(hash->HashMap);
+        hash->HashMap = NULL;
+    }
+    if (hash != NULL)
+    {
+        free(hash);
+        hash = NULL;
+    }
+    return ON_SUCCESS;
 }

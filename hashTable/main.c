@@ -19,5 +19,7 @@ int main()
     hashTableDeleteKey(hash, 289);
     status = hashTableSeek(hash, 289);
     printf("status=%d\n", status);
+
+    ruinHashTable(hash);
     return 0;
 }
