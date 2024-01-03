@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-/*链表初始化*/
 enum STATUS_CODE
 {
     CALLLOC_ERROR = -4,
@@ -50,6 +49,7 @@ static int compareFunc(void *val1, void *val2)
     return *(int *)val1 == *(int *)val2 ? 1 : 0;
 }
 /*****************************以上为静态函数*************************************/
+/*链表初始化*/
 int linkListInit(LinkList **pList)
 {
     /*为链表分配空间*/

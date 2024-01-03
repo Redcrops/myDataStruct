@@ -23,43 +23,60 @@ int compareFunc(void *num1, void *num2)
 /*合并两个有序链表*/
 LinkList *mergeTwoLists(LinkList *list1, LinkList *list2)
 {
+    /*pList1指向链表1的第一个结点*/
     ListNode *pList1 = list1->head->next;
+    /*如果链表1为空直接返回链表2*/
     if (pList1 == NULL)
     {
         return list2;
     }
+    /*pList2指向链表2的第一个结点*/
     ListNode *pList2 = list2->head->next;
+    /*如果链表2为空直接返回链表1*/
     if (pList2 == NULL)
     {
         return list1;
     }
+    /*如果list1和list2都为空，则返回NULL*/
     if (pList2 == NULL && pList1 == NULL)
     {
         return NULL;
     }
+    /*创建一个新链表，用来存放合并后的链表*/
     LinkList *newList = NULL;
     linkListInit(&newList);
-    while (pList1 != NULL && pList2)
+
+    while (pList1 != NULL && pList2 != NULL)
     {
+        /*如果表1数据小于等于表2数据则尾插进入新链表*/
         if (compareFunc(pList1->data, pList2->data))
         {
             linkListTailInsert(newList, pList1->data);
+            /*指针后移*/
             pList1 = pList1->next;
         }
         else
+        /*如果表2数据小于表1数据则尾插进入新链表*/
         {
             linkListTailInsert(newList, pList2->data);
+            /*指针后移*/
             pList2 = pList2->next;
         }
     }
+    /*退出条件为表1遍历完成或者表2遍历完成*/
+
+    /*如果表1遍历完成，表2还没有，则表2全部元素直接尾插进入新链表*/
     while (pList2 != NULL)
     {
         linkListTailInsert(newList, pList2->data);
+        /*指针后移*/
         pList2 = pList2->next;
     }
+    /*如果表2遍历完成，表1还没有，则表2全部元素直接尾插进入新链表*/
     while (pList1 != NULL)
     {
         linkListTailInsert(newList, pList1->data);
+        /*指针后移*/
         pList1 = pList1->next;
     }
     return newList;
@@ -67,7 +84,7 @@ LinkList *mergeTwoLists(LinkList *list1, LinkList *list2)
 int main()
 {
 /*测试用例*/
-#if 0
+#if 0 // 链表增删改查测试
     LinkList *singleList = NULL;
     linkListInit(&singleList);
 
@@ -119,6 +136,7 @@ int main()
     linkListRuin(singleList);
 #endif
 #if 1 // 合并两个有序链表
+
     LinkList *list1 = NULL;
     LinkList *list2 = NULL;
     linkListInit(&list1);
