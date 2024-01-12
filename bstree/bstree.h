@@ -32,13 +32,13 @@ int bstreeRemove(Bstree *bstree, ELEMENTTYPE data);
 int bstreePrePrint(Bstree *bstree);
 
 /*二叉搜索树中序遍历*/
-int bstreePrePrint(Bstree *bstree);
+int bstreeInorderPrint(Bstree *bstree);
 
 /*二叉搜索树后序遍历*/
-int bstreePrePrint(Bstree *bstree);
+int bstreePostPrint(Bstree *bstree);
 
 /*二叉搜索树层序遍历*/
-int bstreePrePrint(Bstree *bstree);
+int bstreeLevelPrint(Bstree *bstree);
 
 /*二叉搜索树销毁*/
 int bstreeDestroy(Bstree *bstree);
