@@ -15,15 +15,16 @@ typedef struct Bstree
 {
     BstreeNode *root;
     int high;
+    int (*compare)(ELEMENTTYPE, ELEMENTTYPE);
 } Bstree;
 /*二叉搜索树初始化*/
-int bstreeInit(Bstree **bstree);
+int bstreeInit(Bstree **bstree, int (*compare)(ELEMENTTYPE, ELEMENTTYPE));
 
 /*二叉搜索树插入*/
 int bstreeInsert(Bstree *bstree, ELEMENTTYPE data);
 
 /*二叉搜索树查找*/
-int bstreeSearch(Bstree *bstree, ELEMENTTYPE data);
+BstreeNode *bstreeSearch(Bstree *bstree, ELEMENTTYPE data);
 
 /*二叉搜索树删除*/
 int bstreeRemove(Bstree *bstree, ELEMENTTYPE data);
